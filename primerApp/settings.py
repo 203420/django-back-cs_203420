@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #Componentes agregados
+    'primerComponente',
     
     #Librerias agregadas al proyecto
     'rest_framework',
