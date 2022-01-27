@@ -1,9 +1,8 @@
-from django.http import response
-from django.shortcuts import render
-from django.template import context
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 
 #Importaciónes de modelos
 from primerComponente.models import PrimerTabla
@@ -48,3 +47,11 @@ class PrimerTablaDetail(APIView):
             datas = serializer.data
             return Response(datas, status= status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        id_response = self.get_object(pk)
+        if id_response != 0:
+            id_response.delete()
+            return Response(status=status.HTTP_200_OK)
+        return Response("No se ha podido eliminar", status=status.HTTP_400_BAD_REQUEST)
+
