@@ -88,7 +88,7 @@ class ImagenViewsDetail(APIView):
     def delete(self, request, pk, format=None):
         id_response = self.get_object(pk)
         if id_response != 0:
+            id_response.url_img.delete(save=True)
             id_response.delete()
-            return Response("Success", status=status.HTTP_200_OK)
-        response = self.response_custom("Error", "No se ha podido eliminar", status=status.HTTP_400_BAD_REQUEST)
-        return Response(response)
+            return Response(self.response_custom("Success", "Eliminado", status=status.HTTP_200_OK))
+        return Response(self.response_custom("Error", "No se ha podido eliminar", status=status.HTTP_400_BAD_REQUEST))
