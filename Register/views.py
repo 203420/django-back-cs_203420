@@ -1,18 +1,17 @@
-#Importaciones para creación de formulario y visualización
 from django.shortcuts import render
-from Register.forms import UserRegisterForm #Formulario creado
-from django.contrib import messages
 
-# Create your views here.
-def registro(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data['username']
-            messages.success(request, f'Usuario {username} creado')
-    else:
-        form = UserRegisterForm()
+# IMPORTACIONES
+from rest_framework.response import Response
+from .serializers import UserSerializer
+from rest_framework.views import APIView
+from rest_framework import status
 
-    context = {'form':form}
-    return render(request, 'registrar/registro.html', context)
+class UserAPI(APIView):
+    def post(self,request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

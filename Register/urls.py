@@ -1,6 +1,8 @@
 from django.urls import path, re_path
-from Register.views import registro
+from django.conf.urls import include
+
+from Register.views import UserAPI
 
 urlpatterns = [
-    re_path(r'^crear/$', registro, name="registro" ),
+    re_path(r'^$', UserAPI.as_view()),    
 ]
