@@ -23,10 +23,11 @@ router.register(r'users', UserViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
-    re_path(r'^api/v1/login', include('Login.urls')), 
+    re_path(r'^api/', include('Login.urls')), 
     re_path(r'^api/v1/primer_componente/', include('primerComponente.urls')),
     re_path(r'^api/v1/registro/', include('Register.urls')), 
     re_path(r'^api/v1/loadImage/', include('loadImage.urls')), 
+    re_path(r'^api/v1/userprofile/', include('UserProfile.urls')), 
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 

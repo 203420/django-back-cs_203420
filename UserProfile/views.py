@@ -4,13 +4,13 @@ from rest_framework import status
 import json 
 
 #Importaciones de modelos
-from primerComponente.models import PrimerTabla
+from UserProfile.models import UserProfile
 
 #Importaciones de serializadores
-from primerComponente.serializers import PrimerTablaSerializer
+from UserProfile.serializers import UserProfileSerializer
 
 # Create your views here.
-class PrimerTablaList(APIView):
+class UserProfileView(APIView):
 
     def response_custom(self, msg, response, status):
         data ={
@@ -25,13 +25,13 @@ class PrimerTablaList(APIView):
 
 
     def get(self, request, format=None):
-        queryset = PrimerTabla.objects.all()
-        serializer = PrimerTablaSerializer(queryset , many=True, context={'request':request})
+        queryset = UserProfile.objects.all()
+        serializer = UserProfileSerializer(queryset , many=True, context={'request':request})
         response= self.response_custom("success", serializer.data, status=status.HTTP_200_OK)
         return Response(response)
 
     def post(self, request, format=None):
-        serializer = PrimerTablaSerializer(data = request.data)
+        serializer = UserProfileSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
@@ -41,23 +41,23 @@ class PrimerTablaList(APIView):
         response= self.response_custom("error", serializer.data, status=status.HTTP_400_BAD_REQUEST)
         return Response(response)
 
-class PrimerTablaDetail(APIView):
+class UserProfileDetail(APIView):
     def get_object(self, pk):
         try:
-            return PrimerTabla.objects.get(pk = pk)
-        except PrimerTabla.DoesNotExist:
+            return UserProfile.objects.get(id_user = pk)
+        except UserProfile.DoesNotExist:
             return 0
 
     def get(self, request, pk, format=None):
         id_response = self.get_object(pk)
         if id_response != 0:
-            id_response = PrimerTablaSerializer(id_response)
+            id_response = UserProfileSerializer(id_response)
             return Response(id_response.data, status=status.HTTP_200_OK)
         return Response("No hay datos", status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, format=None):
         id_response = self.get_object(pk)
-        serializer = PrimerTablaSerializer(id_response, data = request.data)
+        serializer = UserProfile(id_response, data = request.data)
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
