@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.models import User
 import json 
 
 #Importaciones de modelos
@@ -42,6 +43,17 @@ class UserProfileView(APIView):
         return Response(response)
 
 class UserProfileDetail(APIView):
+    def response_custom(self, msg, response, status):
+        data ={
+            "messages": msg,
+            "pay_load": response,
+            "status": status,
+        }
+        res=json.dumps(data)
+        responseOk = json.loads(res)
+
+        return responseOk
+
     def get_object(self, pk):
         try:
             return UserProfile.objects.get(id_user = pk)
@@ -56,13 +68,13 @@ class UserProfileDetail(APIView):
         return Response("No hay datos", status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, format=None):
-        id_response = self.get_object(pk)
-        serializer = UserProfile(id_response, data = request.data)
+        userProfile = self.get_object(pk)
+        serializer = UserProfileSerializer(userProfile, data=request.data)
         if serializer.is_valid():
+            userProfile.url_image.delete(save=True)
             serializer.save()
-            datas = serializer.data
-            return Response(datas, status= status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(self.response_custom("Success", serializer.data, status=status.HTTP_200_OK))
+        return Response(self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST))
 
     def delete(self, request, pk, format=None):
         id_response = self.get_object(pk)
@@ -71,3 +83,25 @@ class UserProfileDetail(APIView):
             return Response(status=status.HTTP_200_OK)
         return Response("No se ha podido eliminar", status=status.HTTP_400_BAD_REQUEST)
 
+class UserProfileData (APIView):
+    def custom_response_get(self, msg, user, status):
+        data ={
+            "message": msg,
+            "first_name":user[0]['first_name'],
+            "last_name":user[0]['last_name'],
+            "username":user[0]['username'],
+            "email":user[0]['email'],
+            "status": status,
+        }
+        res= json.dumps(data)
+        response = json.loads(res)
+        return response
+
+    def put(self, request, pk, format=None):
+        user = User.objects.filter(id=pk)
+        user.update(username = request.data.get('username'))
+        user.update(email = request.data.get('email'))
+        user.update(first_name = request.data.get('first_name'))
+        user.update(last_name = request.data.get('last_name'))
+        user2 = User.objects.filter(id=pk).values()
+        return Response(self.custom_response_get("Actualizado", user2, status=status.HTTP_200_OK))
