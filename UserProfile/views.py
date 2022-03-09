@@ -24,7 +24,6 @@ class UserProfileView(APIView):
 
         return responseOk
 
-
     def get(self, request, format=None):
         queryset = UserProfile.objects.all()
         serializer = UserProfileSerializer(queryset , many=True, context={'request':request})
@@ -41,6 +40,7 @@ class UserProfileView(APIView):
             
         response= self.response_custom("error", serializer.data, status=status.HTTP_400_BAD_REQUEST)
         return Response(response)
+
 
 class UserProfileDetail(APIView):
     def response_custom(self, msg, response, status):
@@ -80,7 +80,9 @@ class UserProfileDetail(APIView):
         id_response = self.get_object(pk)
         if id_response != 0:
             id_response.delete()
-            return Response(status=status.HTTP_200_OK)
+            user = User.objects.filter(id=pk)
+            user.delete()
+            return Response("Perfil eliminado", status=status.HTTP_200_OK)
         return Response("No se ha podido eliminar", status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileData (APIView):
