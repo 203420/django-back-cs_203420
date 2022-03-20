@@ -41,8 +41,8 @@ class ImagenViews(APIView):
     def get(self, request, format=None):
         queryset = Imagen.objects.all()
         serializer = ImagenSerializer(queryset , many=True, context={'request':request})
-        response= self.response_custom("Success", serializer.data, status=status.HTTP_200_OK)
-        return Response(response)
+        responseOk= self.response_custom("Success", serializer.data, status=status.HTTP_200_OK)
+        return Response(responseOk)
 
 class ImagenViewsDetail(APIView):
     def response_custom(self, msg, response, status):
@@ -65,10 +65,10 @@ class ImagenViewsDetail(APIView):
         id_response = self.get_object(pk)
         if id_response != 0:
             id_response = ImagenSerializer(id_response)
-            response= self.response_custom("Success", id_response.data, status=status.HTTP_200_OK)
-            return Response(response)
-        response= self.response_custom("Error", "No hay datos", status=status.HTTP_200_OK)
-        return Response(response)
+            responseOk= self.response_custom("Success", id_response.data, status=status.HTTP_200_OK)
+            return Response(responseOk)
+        responseOk= self.response_custom("Error", "No hay datos", status=status.HTTP_200_OK)
+        return Response(responseOk)
 
     def put(self, request, pk, format = None):
         id_response = self.get_object(pk)
@@ -80,10 +80,10 @@ class ImagenViewsDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
-            response = self.response_custom("Success", datas, status = status.HTTP_201_CREATED)
-            return Response(response)
-        response = self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-        return Response(response)
+            responseOk = self.response_custom("Success", datas, status = status.HTTP_201_CREATED)
+            return Response(responseOk)
+        responseOk = self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        return Response(responseOk)
 
     def delete(self, request, pk, format=None):
         id_response = self.get_object(pk)
