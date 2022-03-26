@@ -19,27 +19,27 @@ class PrimerTablaList(APIView):
             "status": status,
         }
         res=json.dumps(data)
-        responseOk = json.loads(res)
+        response_ok = json.loads(res)
 
-        return responseOk
+        return response_ok
 
 
     def get(self, request, format=None):
         queryset = PrimerTabla.objects.all()
         serializer = PrimerTablaSerializer(queryset , many=True, context={'request':request})
-        responseOk = self.response_custom("success", serializer.data, status=status.HTTP_200_OK)
-        return Response(responseOk)
+        response_ok = self.response_custom("success", serializer.data, status=status.HTTP_200_OK)
+        return Response(response_ok)
 
     def post(self, request, format=None):
         serializer = PrimerTablaSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
-            responseOk = self.response_custom("success", datas, status=status.HTTP_200_OK)
-            return Response(responseOk)
+            response_ok = self.response_custom("success", datas, status=status.HTTP_200_OK)
+            return Response(response_ok)
             
-        responseOk = self.response_custom("error", serializer.data, status=status.HTTP_400_BAD_REQUEST)
-        return Response(responseOk)
+        response_ok = self.response_custom("error", serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response_ok)
 
 class PrimerTablaDetail(APIView):
     def get_object(self, pk):

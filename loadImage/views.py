@@ -20,8 +20,8 @@ class ImagenViews(APIView):
             "status": status,
         }
         res= json.dumps(data)
-        responseOk = json.loads(res)
-        return responseOk
+        response_ok = json.loads(res)
+        return response_ok
 
     def post(self, request):
         if 'url_img' not in request.data:
@@ -41,8 +41,8 @@ class ImagenViews(APIView):
     def get(self, request, format=None):
         queryset = Imagen.objects.all()
         serializer = ImagenSerializer(queryset , many=True, context={'request':request})
-        responseOk= self.response_custom("Success", serializer.data, status=status.HTTP_200_OK)
-        return Response(responseOk)
+        response_ok= self.response_custom("Success", serializer.data, status=status.HTTP_200_OK)
+        return Response(response_ok)
 
 class ImagenViewsDetail(APIView):
     def response_custom(self, msg, response, status):
@@ -52,8 +52,8 @@ class ImagenViewsDetail(APIView):
             "status": status,
         }
         res= json.dumps(data)
-        responseOk = json.loads(res)
-        return responseOk
+        response_ok = json.loads(res)
+        return response_ok
 
     def get_object(self, pk):
         try:
@@ -65,10 +65,10 @@ class ImagenViewsDetail(APIView):
         id_response = self.get_object(pk)
         if id_response != 0:
             id_response = ImagenSerializer(id_response)
-            responseOk= self.response_custom("Success", id_response.data, status=status.HTTP_200_OK)
-            return Response(responseOk)
-        responseOk= self.response_custom("Error", "No hay datos", status=status.HTTP_200_OK)
-        return Response(responseOk)
+            response_ok= self.response_custom("Success", id_response.data, status=status.HTTP_200_OK)
+            return Response(response_ok)
+        response_ok= self.response_custom("Error", "No hay datos", status=status.HTTP_200_OK)
+        return Response(response_ok)
 
     def put(self, request, pk, format = None):
         id_response = self.get_object(pk)
@@ -80,10 +80,10 @@ class ImagenViewsDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
-            responseOk = self.response_custom("Success", datas, status = status.HTTP_201_CREATED)
-            return Response(responseOk)
-        responseOk = self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-        return Response(responseOk)
+            response_ok = self.response_custom("Success", datas, status = status.HTTP_201_CREATED)
+            return Response(response_ok)
+        response_ok = self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        return Response(response_ok)
 
     def delete(self, request, pk, format=None):
         id_response = self.get_object(pk)
