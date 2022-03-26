@@ -20,26 +20,26 @@ class UserProfileView(APIView):
             "status": status,
         }
         res=json.dumps(data)
-        responseOk = json.loads(res)
+        response = json.loads(res)
 
-        return responseOk
+        return response
 
     def get(self, request, format=None):
         queryset = UserProfile.objects.all()
         serializer = UserProfileSerializer(queryset , many=True, context={'request':request})
-        responseOk= self.response_custom("success", serializer.data, status=status.HTTP_200_OK)
-        return Response(responseOk)
+        response = self.response_custom("success", serializer.data, status=status.HTTP_200_OK)
+        return Response(response)
 
     def post(self, request, format=None):
         serializer = UserProfileSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
-            responseOk= self.response_custom("success", datas, status=status.HTTP_200_OK)
-            return Response(responseOk)
+            response= self.response_custom("success", datas, status=status.HTTP_200_OK)
+            return Response(response)
             
-        responseOk= self.response_custom("error", serializer.data, status=status.HTTP_400_BAD_REQUEST)
-        return Response(responseOk)
+        response= self.response_custom("error", serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(response)
 
 
 class UserProfileDetail(APIView):
@@ -50,9 +50,9 @@ class UserProfileDetail(APIView):
             "status": status,
         }
         res=json.dumps(data)
-        responseOk = json.loads(res)
+        response = json.loads(res)
 
-        return responseOk
+        return response
 
     def get_object(self, pk):
         try:
@@ -68,10 +68,10 @@ class UserProfileDetail(APIView):
         return Response("No hay datos", status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, format=None):
-        userProfile = self.get_object(pk)
-        serializer = UserProfileSerializer(userProfile, data=request.data)
+        user_profile = self.get_object(pk)
+        serializer = UserProfileSerializer(user_profile, data=request.data)
         if serializer.is_valid():
-            userProfile.url_image.delete(save=True)
+            user_profile.url_image.delete(save=True)
             serializer.save()
             return Response(self.response_custom("Success", serializer.data, status=status.HTTP_200_OK))
         return Response(self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST))
