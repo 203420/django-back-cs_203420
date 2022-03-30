@@ -41,8 +41,7 @@ class ImagenViews(APIView):
     def get(self, request, format=None):
         queryset = Imagen.objects.all()
         serializer = ImagenSerializer(queryset , many=True, context={'request':request})
-        response_ok= self.response_custom("Success", serializer.data, status=status.HTTP_200_OK)
-        return Response(response_ok)
+        return Response(self.response_custom("Success", serializer.data, status=status.HTTP_200_OK))
 
 class ImagenViewsDetail(APIView):
     def response_custom(self, msg, response, status):
@@ -64,11 +63,9 @@ class ImagenViewsDetail(APIView):
     def get(self, request, pk, format=None):
         id_response = self.get_object(pk)
         if id_response != 0:
-            id_response = ImagenSerializer(id_response)
-            response_ok= self.response_custom("Success", id_response.data, status=status.HTTP_200_OK)
-            return Response(response_ok)
-        response_ok= self.response_custom("Error", "No hay datos", status=status.HTTP_200_OK)
-        return Response(response_ok)
+            id_response = ImagenSerializer(id_response) 
+            return Response(self.response_custom("Success", id_response.data, status=status.HTTP_200_OK)) 
+        return Response(self.response_custom("Error", "No hay datos", status=status.HTTP_200_OK))
 
     def put(self, request, pk, format = None):
         id_response = self.get_object(pk)
@@ -79,11 +76,9 @@ class ImagenViewsDetail(APIView):
         serializer = ImagenSerializer(id_response, data = request.data)
         if serializer.is_valid():
             serializer.save()
-            datas = serializer.data
-            response_ok = self.response_custom("Success", datas, status = status.HTTP_201_CREATED)
-            return Response(response_ok)
-        response_ok = self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-        return Response(response_ok)
+            datas = serializer.data 
+            return Response(self.response_custom("Success", datas, status = status.HTTP_201_CREATED)) 
+        return Response(self.response_custom("Error", serializer.errors, status = status.HTTP_400_BAD_REQUEST))
 
     def delete(self, request, pk, format=None):
         id_response = self.get_object(pk)

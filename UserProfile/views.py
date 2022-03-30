@@ -36,8 +36,7 @@ class UserProfileView(APIView):
             serializer.save()
             datas = serializer.data
             response= self.response_custom("success", datas, status=status.HTTP_200_OK)
-            return Response(response)
-            
+            return Response(response)    
         response= self.response_custom("error", serializer.data, status=status.HTTP_400_BAD_REQUEST)
         return Response(response)
 
